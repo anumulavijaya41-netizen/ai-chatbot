@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> AI Chatbot</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <!-- HERO SECTION -->
+
+    <section class="hero" id="hero">
+
+        <div class="left">
+
+            <h1>CHATBOT</h1>
+
+            <h2>Technology</h2>
+
+            <p>
+                Build your own AI chatbot using
+                HTML, CSS and Python.
+            </p>
+
+            <button onclick="openChat()">
+                Get Started
+            </button>
+
+        </div>
+
+        <div class="right">
+
+            <img src="https://cdn-icons-png.flaticon.com/512/4712/4712027.png">
+
+        </div>
+
+    </section>
+
+
+    <!-- CHAT SECTION -->
+
+    <section class="chat-container" id="chatbox">
+
+        <div class="chat-header">
+             AI Chatbot
+        </div>
+
+        <div class="messages" id="messages">
+
+            <div class="bot">
+                Hello👋 How can I help you?
+            </div>
+
+        </div>
+
+        <div class="input-area">
+
+            <input type="text" id="userInput" placeholder="Type message...">
+
+            <button onclick="sendMessage()">
+                Send
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <script>
+
+        function openChat(){
+
+            document.getElementById("hero").style.display = "none";
+
+            document.getElementById("chatbox").style.display = "flex";
+
+        }
+
+        async function sendMessage(){
+
+    let input = document.getElementById("userInput");
+
+    let message = input.value;
+
+    if(message.trim() === ""){
+        return;
+    }
+
+    let messages = document.getElementById("messages");
+
+    // SHOW USER MESSAGE
+
+    messages.innerHTML += `
+        <div class="user">
+            ${message}
+        </div>
+    `;
+
+    input.value = "";
+
+    // SEND MESSAGE TO FLASK
+
+    let response = await fetch("/chat", {
+
+        method: "POST",
+
+        headers: {
+            "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify({
+            message: message
+        })
+
+    });
+
+    let data = await response.json();
+
+    // SHOW BOT MESSAGE
+
+    messages.innerHTML += `
+        <div class="bot">
+            ${data.reply.replace(/\n/g, "<br>")}
+        </div>
+    `;
+
+    // AUTO SCROLL
+
+    messages.scrollTop = messages.scrollHeight;
+}
+          // ENTER BUTTON SUPPORT
+
+        document.getElementById("userInput")
+        .addEventListener("keypress", function(event){
+
+            if(event.key === "Enter"){
+
+                sendMessage();
+
+            }
+
+        });
+
+    </script>
+
+</body>
+</html>
