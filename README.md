@@ -12,3 +12,6 @@ Frontend chatbot UI design
 Backend integration using Flask
 API communication between frontend and backend
 Responsive chatbot layout
+
+![image alt](https://github.com/anumulavijaya41-netizen/ai-chatbot/blob/f360e71109bdb550aaa107af4c340ce85350e058/Screenshot%202026-05-21%20091908.png)
+
